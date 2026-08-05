@@ -1,0 +1,11 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+allowBuilds:
+  bcrypt: false
+  esbuild: false
+onlyBuiltDependencies:
+  - bcrypt
+  - esbuild
+  - protobufjs
+  - core-js

@@ -1,0 +1,13 @@
+{
+  "name": "flow-board-microservices",
+  "private": true,
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build"
+  },
+  "devDependencies": {
+    "@types/node": "^24.x.x",
+    "turbo": "^2.x.x",
+    "typescript": "^5.x.x"
+  }
+}

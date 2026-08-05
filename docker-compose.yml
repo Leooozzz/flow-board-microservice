@@ -1,0 +1,245 @@
+services:
+
+  rabbitmq:
+    image: rabbitmq:4-management
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  users-postgres:
+    image: postgres:16
+    container_name: users-postgres
+    restart: always
+    env_file:
+      - apps/users-service/.env
+    ports:
+      - "5432:5432"
+    volumes:
+      - users_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  team-postgres:
+    image: postgres:16
+    container_name: team-postgres
+    restart: always
+    env_file:
+      - apps/team-service/.env
+    ports:
+      - "5433:5432"
+    volumes:
+      - team_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  card-postgres:
+    image: postgres:16
+    container_name: card-postgres
+    restart: always
+    env_file:
+      - apps/card-service/.env
+    ports:
+      - "5434:5432"
+    volumes:
+      - card_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  tags-postgres:
+    image: postgres:16
+    container_name: tags-postgres
+    restart: always
+    env_file:
+      - apps/tags-service/.env
+    ports:
+      - "5435:5432"
+    volumes:
+      - tags_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  column-postgres:
+    image: postgres:16
+    container_name: column-postgres
+    restart: always
+    env_file:
+      - apps/column-service/.env
+    ports:
+      - "5436:5432"
+    volumes:
+      - column_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  project-postgres:
+    image: postgres:16
+    container_name: project-postgres
+    restart: always
+    env_file:
+      - apps/project-service/.env
+    ports:
+      - "5437:5432"
+    volumes:
+      - project_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  users-services:
+    build:
+      context: .
+      dockerfile: apps/users-service/Dockerfile
+    container_name: users-services
+    restart: always
+    env_file:
+      - apps/users-service/.env
+    ports:
+      - "3001:3001"
+    depends_on:
+      users-postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      team-services:
+        condition: service_started
+
+  team-services:
+    build:
+      context: .
+      dockerfile: apps/team-service/Dockerfile
+    container_name: team-services
+    restart: always
+    env_file:
+      - apps/team-service/.env
+    ports:
+      - "3003:3003"
+    depends_on:
+      team-postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  card-services:
+    build:
+      context: .
+      dockerfile: apps/card-service/Dockerfile
+    container_name: card-services
+    restart: always
+    env_file:
+      - apps/card-service/.env
+    ports:
+      - "3004:3004"
+    depends_on:
+      card-postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  tags-services:
+    build:
+      context: .
+      dockerfile: apps/tags-service/Dockerfile
+    container_name: tags-services
+    restart: always
+    env_file:
+      - apps/tags-service/.env
+    ports:
+      - "3005:3005"
+    depends_on:
+      tags-postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  column-services:
+    build:
+      context: .
+      dockerfile: apps/column-service/Dockerfile
+    container_name: column-services
+    restart: always
+    env_file:
+      - apps/column-service/.env
+    ports:
+      - "3006:3006"
+    depends_on:
+      column-postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  project-services:
+    build:
+      context: .
+      dockerfile: apps/project-service/Dockerfile
+    container_name: project-services
+    restart: always
+    env_file:
+      - apps/project-service/.env
+    ports:
+      - "3007:3007"
+    depends_on:
+      project-postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+  gateway:
+    build:
+      context: .
+      dockerfile: apps/gateway/Dockerfile
+    container_name: gateway
+    restart: always
+    env_file:
+      - apps/gateway/.env
+    ports:
+      - "3000:3000"
+    depends_on:
+      users-services:
+        condition: service_started
+      team-services:
+        condition: service_started
+      card-services:
+        condition: service_started
+      tags-services:
+        condition: service_started
+      column-services:
+        condition: service_started
+      project-services:
+        condition: service_started
+
+volumes:
+  users_postgres_data:
+  team_postgres_data:
+  card_postgres_data:
+  tags_postgres_data:
+  column_postgres_data:
+  project_postgres_data:
+  rabbitmq_data:
