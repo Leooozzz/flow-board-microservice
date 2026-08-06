@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { db } from "../../../database/client.js";
 import { tags } from "../../../database/schema/tags.schema.js";
 import { CreateTagDTO } from "../dto/CreateTagDTO.js";
@@ -23,5 +23,16 @@ export const listAllTags = async () => {
 
 export const tagsByTeamId = async (teamId: string) => {
   const result = await db.select().from(tags).where(eq(tags.teamId, teamId));
+  return result ?? null;
+};
+export const ListTagById = async (tagId: string) => {
+  const result = await db.select().from(tags).where(eq(tags.id, tagId));
+  return result ?? null;
+};
+export const ListTagByIdTeam = async (tagId: string, teamId: string) => {
+  const result = await db
+    .select()
+    .from(tags)
+    .where(and(eq(tags.id, tagId), eq(tags.teamId, teamId)));
   return result ?? null;
 };
