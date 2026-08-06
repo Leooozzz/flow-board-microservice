@@ -15,3 +15,7 @@ export const createTag = async (teamId: string, data: CreateTagDTO) => {
 
   return tag ?? null;
 };
+export const listAllTags = async () => {
+  const result = await db.select().from(tags)
+  return result ?? null
+}
