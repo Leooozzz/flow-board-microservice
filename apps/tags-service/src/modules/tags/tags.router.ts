@@ -3,6 +3,8 @@ import { AuthMiddleware } from "./middlewares/AuthMiddleware.js";
 import { CreateTagController } from "./controller/CreateTagController.js";
 import { CreateTagByTeamIdController } from "./controller/CreateTagControllerByTeamId.js";
 import { ListTagsControler } from "./controller/ListTagsControler.js";
+import { ListTagsByTeamIdController } from "./controller/ListTagsByTeamIdController.js";
+import { ListTagByIdController } from "./controller/ListTagByIdController.js";
 
 const tagsRouter = Router();
 
@@ -12,8 +14,8 @@ tagsRouter.post("/create-tag", CreateTagController);
 tagsRouter.post("/create-tag/:teamId", CreateTagByTeamIdController);
 
 tagsRouter.get("/list-tags",ListTagsControler);
-//tagsRouter.get("/list-tags-by-team/:teamId",ListTagsByTeamIdController)
-//tagsRouter.get("/list-tags/:id");
+tagsRouter.get("/list-tags-by-team/:teamId",ListTagsByTeamIdController)
+tagsRouter.get("/list-tags/:id",ListTagByIdController);
 //tagsRouter.put("/edit-tag/:id");
 //tagsRouter.delete("/remove-tags/:id");
 
