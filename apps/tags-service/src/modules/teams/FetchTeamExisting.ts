@@ -1,18 +1,19 @@
 import { env } from "../../config/env.js";
 import { AppError } from "../tags/errors/AppError.js";
 
-interface User {
-  teamId: string;
-  userId: string;
-  role: "OWNER" | "MEMBER";
-  joinedAt: Date;
+interface Team {
+  id: string;
+  name: string;
+  ownerId: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 export const FetchTeamExisting = async (
-  userId: string,
+  teamId: string,
   accessToken: string,
-): Promise<User> => {
+): Promise<Team> => {
   const res = await fetch(
-    `${env.TEAM_SERVICE_URL}/teams/manager-user-by-id/${userId}`,
+    `${env.TEAM_SERVICE_URL}/teams/list-team-by-teamId/${teamId}`,
     {
       method: "GET",
       headers: {
@@ -27,5 +28,5 @@ export const FetchTeamExisting = async (
     } | null;
     throw new AppError(res.status, body?.massage ?? "Team service error");
   }
-  return (await res.json()) as User;
+  return (await res.json()) as Team;
 };

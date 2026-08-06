@@ -6,12 +6,16 @@ import { DeleteTeamByIdController } from "./controller/DeleteTeamByIdController.
 import { ManagerAddUserController } from "./controller/ManagerAddUserController.js";
 import { ManagerRemoveUserController } from "./controller/ManagerRemoveUserController.js";
 import { ManagerByIdController } from "./controller/ManagerUserByIdController.js";
+import { ListTeamsController } from "./controller/ListTeamsController.js";
+import { ListTeamByTeamIdController } from "./controller/ListTeamByTeamIdController.js";
+import { MyMembershipController } from "./controller/MyMembershipController.js";
 
 const teamsRouter = Router();
 
 teamsRouter.use(AuthMiddleware);
 
 teamsRouter.get("/members", ListTeamMembersController);
+teamsRouter.get("/my-membership", MyMembershipController);
 teamsRouter.get("/manager-user-by-id/:userId", ManagerByIdController);
 teamsRouter.get("/list-teams", ListTeamsController);
 teamsRouter.get("/list-team-by-teamId/:teamId", ListTeamByTeamIdController);

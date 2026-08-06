@@ -71,3 +71,12 @@ export const updateTeam = async (teamId: string, data: EditTeamDTO) => {
     .returning();
   return team;
 };
+
+export const ListAllTeams = async () => {
+  const team = await db.select().from(teams);
+  return teams ?? null;
+};
+export const GetTeamById = async (teamId: string) => {
+  const team = await db.select().from(teams).where(eq(teams.id, teamId));
+  return team ?? null;
+};

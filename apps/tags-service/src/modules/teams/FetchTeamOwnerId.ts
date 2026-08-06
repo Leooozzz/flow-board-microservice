@@ -8,11 +8,10 @@ interface User {
   joinedAt: Date;
 }
 export const FetchTeamOwnerId = async (
-  userId: string,
   accessToken: string,
 ): Promise<User> => {
   const res = await fetch(
-    `${env.TEAM_SERVICE_URL}/teams/manager-user-by-id/${userId}`,
+    `${env.TEAM_SERVICE_URL}/teams/my-membership`,
     {
       method: "GET",
       headers: {
