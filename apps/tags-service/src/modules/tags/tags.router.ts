@@ -5,6 +5,8 @@ import { CreateTagByTeamIdController } from "./controller/CreateTagControllerByT
 import { ListTagsControler } from "./controller/ListTagsControler.js";
 import { ListTagsByTeamIdController } from "./controller/ListTagsByTeamIdController.js";
 import { ListTagByIdController } from "./controller/ListTagByIdController.js";
+import { EditTagByIdController } from "./controller/EditTagByIdController.js";
+import { RemoveTagByIdController } from "./controller/RemoveTagByIdController.js";
 
 const tagsRouter = Router();
 
@@ -13,11 +15,10 @@ tagsRouter.use(AuthMiddleware);
 tagsRouter.post("/create-tag", CreateTagController);
 tagsRouter.post("/create-tag/:teamId", CreateTagByTeamIdController);
 
-tagsRouter.get("/list-tags",ListTagsControler);
-tagsRouter.get("/list-tags-by-team/:teamId",ListTagsByTeamIdController)
-tagsRouter.get("/list-tags/:id",ListTagByIdController);
-//tagsRouter.put("/edit-tag/:id");
-//tagsRouter.delete("/remove-tags/:id");
-
+tagsRouter.get("/list-tags", ListTagsControler);
+tagsRouter.get("/list-tags-by-team/:teamId", ListTagsByTeamIdController);
+tagsRouter.get("/list-tags/:id", ListTagByIdController);
+tagsRouter.put("/edit-tag/:id", EditTagByIdController);
+tagsRouter.delete("/remove-tags/:id", RemoveTagByIdController);
 
 export default tagsRouter;
