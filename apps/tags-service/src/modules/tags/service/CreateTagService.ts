@@ -5,7 +5,7 @@ import { AuthUser } from "../middlewares/AuthMiddleware.js";
 import { createTag } from "../repository/TagsRepository.js";
 
 export const CreateTagService = async (user:AuthUser,data:CreateTagDTO,accessToken:string) => {
-  const existingUser = await FetchTeamOwnerId(user.id,accessToken)
+  const existingUser = await FetchTeamOwnerId(accessToken)
   if(existingUser.role !== "OWNER" ){
     throw new AppError(403,"Forbidden")
   }
